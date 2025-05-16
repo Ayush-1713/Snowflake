@@ -1,11 +1,12 @@
-Snowflake
+<h1>Snowflake</h1>
+<hr>
 ⚠️ This project is currently under development.
 If you would like to contribute or provide suggestions, feel free to email me at [your-email@example.com].
 
-🌐 Overview
-Snowflake is a web-based project designed to provide insights into various locations that are undergoing gradual development. The application offers users a visual and interactive experience to explore these areas, highlighting their unique characteristics and the pace of their growth.
+🌐 <h1>Overview</h1>
+Snowflake is a web-based project designed to provide insights into various locations that are undergoing gradual development. The application offers users a visual and interactive experience to explore these areas, highlighting their unique characteristics and the pace of their growth
 
-📁 Project Structure
+📁 <h1>Project Structure</h1>
 index.html: The main landing page of the application.
 
 details.html: Provides detailed information about selected locations.
@@ -14,7 +15,7 @@ style.css: Contains all the styling rules to ensure a cohesive and responsive de
 
 app.js: Handles the interactive functionalities and data manipulation for the application.
 
-🚀 Features
+🚀 <h1>Features</h1>
 Interactive Map: Navigate through different regions and select areas of interest.
 
 Detailed Insights: Access comprehensive information about each location's development status.
