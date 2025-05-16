@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Monument Details</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <style>
+        body {
+            background-color: black;
+            color: white;
+        }
+
+        .box {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            min-height: 80vh;
+            border: 2px solid #838383;
+            box-shadow: 0px 0px 8px #e4e0e0;
+            margin: 50px;
+            border-radius: 10px;
+            padding: 40px;
+        }
+
+        .hero-img {
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            width: 100%px;
+            /* or 100% */
+            height: 200px;
+            /* or any fixed height */
+            object-fit: cover;
+            border-radius: 10px;
+            box-shadow: 0px 0px 8px #e4e0e0;
+        }
+
+        .coordinates-box,
+        .info-box {
+            border-radius: 8px;
+            padding: 8px 18px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 8px rgba(255, 255, 255, 0.08);
+        }
+
+        .coordinates-text {
+            font-size: 1.1em;
+            color: #e0c3fc;
+        }
+    </style>
+</head>
+
+<body data-bs-theme="dark">
+
+    <nav class="navbar navbar-expand-lg bg-dark border-bottom border-body" data-bs-theme="dark">
+        <div class="container-fluid">
+            <a class="navbar-brand h1" href="#"><i class="fa-regular fa-snowflake " style="color: #bf00ff;"></i>
+                Snowflake</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+                aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">HOME</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            About us
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Subscription</a></li>
+                            <li><a class="dropdown-item" href="#">Our members</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="box">
+        <div id="carouselContainer" class="w-100"></div>
+    </div>
+
+    <div class="box">
+        <div>
+            <img id="mainImage" class="hero-img" src="" alt="Hero Image" />
+        </div>
+        <div class="text-center w-100 mt-4">
+            <h1 id="title"></h1>
+            <p id="description1"></p>
+            <p id="description2"></p>
+        </div>
+    </div>
+
+    <div class="box">
+        <div id="mapContainer" class="mb-4"></div>
+        <div class="text-center w-100">
+            <h2>Location</h2>
+            <p id="locationText"></p>
+            <div class="row justify-content-center" id="infoBoxes"></div>
+        </div>
+    </div>
+
+    <script>
+        const data = {
+            Taj_Mahal: {
+                title: "Taj Mahal",
+                carousel: [
+                    "https://tajmahal.gov.in/images/banners/1.jpg",
+                    "https://tajmahal.gov.in/images/banners/2.jpg",
+                    "https://tajmahal.gov.in/images/banners/3.jpg",
+                    "https://tajmahal.gov.in/images/banners/4.jpg"
+                ],
+                image: "https://www.travelandleisure.com/thmb/xAjkz4pKfjTbWJTeM_V5138lxRs=/1600x1000/filters:fill(auto,1)/taj-mahal-agra-india-TAJ0217-9eab8f20d11d4391901867ed1ce222b8.jpg",
+                description1: "The Taj Mahal is an Islamic ivory-white marble mausoleum in Agra. It was commissioned by Shah Jahan to house the tomb of Mumtaz Mahal.",
+                description2: "It is regarded as the jewel of Muslim art in India and a universally admired masterpiece of world heritage.",
+                mapEmbed: `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3549.4236235006315!2d78.04155210999822!3d27.174419389930822!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39747121d702ff6d%3A0xdd2ae4803f767dde!2sTaj%20Mahal!5e0!3m2!1sen!2sin!4v1747211163491!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`,
+                locationText: "Located in Agra, Uttar Pradesh, India, on the southern bank of the Yamuna River.",
+                facts: [
+                    { color: "#bf00ff", content: "<strong>Coordinates:</strong> 27°10′30″N 78°2′31″E" },
+                    { color: "#00bfff", content: "<strong>Area:</strong> 17 ha<br><strong>Height:</strong> 73 m" },
+                    { color: "#ffbf00", content: "<strong>Built:</strong> 1631–1653<br><strong>Built for:</strong> Mumtaz Mahal" },
+                    { color: "#00ffbf", content: "<strong>Architect:</strong> Ustad Ahmad Lahori<br><strong>Style:</strong> Mughal" },
+                    { color: "#ff00bf", content: "<strong>Visitors:</strong> 4.84M/year<br><strong>Governing:</strong> ASI, India" },
+                    { color: "#00ff40", content: `<strong>Website:</strong> <a href="https://tajmahal.gov.in" target="_blank">tajmahal.gov.in</a>` }
+                ]
+            },
+
+            Great_Wall_of_China: {
+                title: "Great Wall of China",
+                carousel: [
+                    "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80",
+                    "https://th.bing.com/th/id/R.372edb949e21926b85c6b84074c5d6ee?rik=APoUTmJxygDvOA&riu=http%3a%2f%2fwallpapercave.com%2fwp%2frQTe6Cr.jpg&ehk=GtciV3S8Emlqd5O9dYGAmjXqWS46nUJJ6BHO0m74dMs%3d&risl=&pid=ImgRaw&r=0",
+                    "https://images.travelandleisureasia.com/wp-content/uploads/sites/2/2023/01/31125950/History-Great-Wall-Of-China-.jpg",
+                    "https://static.vecteezy.com/system/resources/previews/033/863/522/large_2x/great-wall-of-china-at-sunrise-panoramic-view-of-china-the-great-wall-of-china-in-the-mist-lying-long-surrealist-view-from-dronegraphy-8k-ai-generated-free-photo.jpg"
+                ],
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/The_Great_Wall_of_China_at_Jinshanling-edit.jpg/500px-The_Great_Wall_of_China_at_Jinshanling-edit.jpg",
+                description1: "The Great Wall is a series of fortifications built along the northern borders of China...",
+                description2: "Most well-known sections were built by the Ming dynasty (1368–1644).",
+                mapEmbed: `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3262.964204249782!2d116.57037431524453!3d40.43190797936351!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x35f1a7b1e2e7c6e7%3A0x8e3a6e2e7c6e7e3a!2sGreat%20Wall%20of%20China!5e0!3m2!1sen!2sus!4v1747212000000!5m2!1sen!2sus" width="600" height="450" style="border:0;" allowfullscreen loading="lazy"></iframe>`,
+                locationText: "Stretches across northern China, passing through Hebei, Beijing, and Gansu.",
+                facts: [
+                    { color: "#bf00ff", content: "<strong>Coordinates:</strong> 40°25′N 116°5′E" },
+                    { color: "#00bfff", content: "<strong>Length:</strong> ~21,196 km<br><strong>Height:</strong> 5–8 m" },
+                    { color: "#ffbf00", content: "<strong>Built:</strong> 7th century BC–16th century AD<br><strong>Purpose:</strong> Defense" },
+                    { color: "#00ffbf", content: "<strong>Style:</strong> Ancient Chinese military architecture" },
+                    { color: "#ff00bf", content: "<strong>Visitors:</strong> ~10 million/year<br><strong>Governing:</strong> State Administration of Cultural Heritage" },
+                    { color: "#00ff40", content: `<strong>Website:</strong> <a href="https://en.mutianyugreatwall.com/" target="_blank">Mutianyu Great Wall</a>` }
+                ]
+            },
+
+            Petra: {
+                title: "Petra",
+                carousel: [
+                    "https://upload.wikimedia.org/wikipedia/commons/9/9b/Al_Khazneh_Petra_Edit_2.jpg",
+                    "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1200&q=80",
+                    "https://www.planetware.com/wpimages/2020/02/jordan-petra-top-attractions-treasury.jpg",
+                    "https://cdn.britannica.com/33/1933-050-3B7B7B7B/Petra-Jordan.jpg"
+                ],
+                image: "https://www.history.com/.image/t_share/MTU3ODc4NjAzNzYxNjQzNjYy/petra-hero.jpg",
+                description1: "Petra is a famous archaeological site in Jordan's southwestern desert, dating to around 300 B.C.",
+                description2: "It was the capital of the Nabataean Kingdom and is known for its rock-cut architecture and water conduit system.",
+                mapEmbed: `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3382.219521942493!2d35.44194431517246!3d30.32845498177114!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x15016efb8b8b8b8b%3A0x8b8b8b8b8b8b8b8b!2sPetra!5e0!3m2!1sen!2sus!4v1747213000000!5m2!1sen!2sus" width="600" height="450" style="border:0;" allowfullscreen loading="lazy"></iframe>`,
+                locationText: "Located in southern Jordan, between the Dead Sea and the Red Sea.",
+                facts: [
+                    { color: "#bf00ff", content: "<strong>Coordinates:</strong> 30°19′43″N 35°26′31″E" },
+                    { color: "#00bfff", content: "<strong>Founded:</strong> 4th century BC<br><strong>Area:</strong> 264 km²" },
+                    { color: "#ffbf00", content: "<strong>Known for:</strong> Rock-cut architecture<br><strong>UNESCO:</strong> 1985" },
+                    { color: "#00ffbf", content: "<strong>Nickname:</strong> Rose City" },
+                    { color: "#ff00bf", content: "<strong>Visitors:</strong> ~1 million/year" },
+                    { color: "#00ff40", content: `<strong>Website:</strong> <a href="https://visitpetra.jo/" target="_blank">visitpetra.jo</a>` }
+                ]
+            },
+
+            Colosseum: {
+                title: "Colosseum",
+                carousel: [
+                    "https://upload.wikimedia.org/wikipedia/commons/d/de/Colosseo_2020.jpg",
+                    "https://images.unsplash.com/photo-1509395176047-4a66953fd231?auto=format&fit=crop&w=1200&q=80",
+                    "https://www.planetware.com/wpimages/2020/02/italy-rome-colosseum-exterior.jpg",
+                    "https://cdn.britannica.com/33/1933-050-3B7B7B7B/Colosseum-Rome-Italy.jpg"
+                ],
+                image: "https://www.history.com/.image/t_share/MTU3ODc4NjAzNzYxNjQzNjYy/colosseum-hero.jpg",
+                description1: "The Colosseum is an oval amphitheatre in the centre of Rome, Italy, built of travertine limestone, tuff, and brick-faced concrete.",
+                description2: "It is the largest ancient amphitheatre ever built, and is still the largest standing amphitheatre in the world.",
+                mapEmbed: `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2994.0000000000005!2d12.49223031542232!3d41.89021097922113!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x132f61a4b4b4b4b4%3A0x4b4b4b4b4b4b4b4b!2sColosseum!5e0!3m2!1sen!2sus!4v1747214000000!5m2!1sen!2sus" width="600" height="450" style="border:0;" allowfullscreen loading="lazy"></iframe>`,
+                locationText: "Located in the centre of Rome, Italy, just east of the Roman Forum.",
+                facts: [
+                    { color: "#bf00ff", content: "<strong>Coordinates:</strong> 41°53′25″N 12°29′32″E" },
+                    { color: "#00bfff", content: "<strong>Capacity:</strong> 50,000–80,000<br><strong>Height:</strong> 48 m" },
+                    { color: "#ffbf00", content: "<strong>Built:</strong> AD 70–80<br><strong>Purpose:</strong> Gladiatorial contests" },
+                    { color: "#00ffbf", content: "<strong>Style:</strong> Ancient Roman architecture" },
+                    { color: "#ff00bf", content: "<strong>Visitors:</strong> ~7 million/year" },
+                    { color: "#00ff40", content: `<strong>Website:</strong> <a href="https://parcocolosseo.it/" target="_blank">parcocolosseo.it</a>` }
+                ]
+            },
+
+            Chichen_Itza: {
+                title: "Chichen Itza",
+                carousel: [
+                    "https://upload.wikimedia.org/wikipedia/commons/9/9a/Chichen_Itza_3.jpg",
+                    "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=1200&q=80",
+                    "https://www.planetware.com/wpimages/2020/02/mexico-chichen-itza-top-attractions-pyramid.jpg",
+                    "https://cdn.britannica.com/33/1933-050-3B7B7B7B/Chichen-Itza-Mexico.jpg"
+                ],
+                image: "https://www.history.com/.image/t_share/MTU3ODc4NjAzNzYxNjQzNjYy/chichen-itza-hero.jpg",
+                description1: "Chichen Itza was a large pre-Columbian city built by the Maya people of the Terminal Classic period.",
+                description2: "It is one of the most visited archaeological sites in Mexico.",
+                mapEmbed: `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3724.0000000000005!2d-88.56778231542232!3d20.68428497922113!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8f5138b8b8b8b8b8%3A0x8b8b8b8b8b8b8b8b!2sChichen%20Itza!5e0!3m2!1sen!2sus!4v1747215000000!5m2!1sen!2sus" width="600" height="450" style="border:0;" allowfullscreen loading="lazy"></iframe>`,
+                locationText: "Located in Tinúm Municipality, Yucatán State, Mexico.",
+                facts: [
+                    { color: "#bf00ff", content: "<strong>Coordinates:</strong> 20°40′59″N 88°34′7″W" },
+                    { color: "#00bfff", content: "<strong>Founded:</strong> c. 600 AD<br><strong>Height:</strong> 30 m (El Castillo)" },
+                    { color: "#ffbf00", content: "<strong>Culture:</strong> Maya civilization" },
+                    { color: "#00ffbf", content: "<strong>UNESCO:</strong> 1988" },
+                    { color: "#ff00bf", content: "<strong>Visitors:</strong> ~2.6 million/year" },
+                    { color: "#00ff40", content: `<strong>Website:</strong> <a href="https://www.inah.gob.mx/zonas/91-zona-arqueologica-de-chichen-itza" target="_blank">INAH Chichen Itza</a>` }
+                ]
+            },
+
+            Amber_Fort: {
+                title: "Amber Fort",
+                carousel: [
+                    "https://upload.wikimedia.org/wikipedia/commons/6/6e/Amber_Fort_2011.jpg",
+                    "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80",
+                    "https://www.planetware.com/wpimages/2020/02/india-jaipur-amber-fort.jpg",
+                    "https://cdn.britannica.com/33/1933-050-3B7B7B7B/Amber-Fort-Jaipur-India.jpg"
+                ],
+                image: "https://www.history.com/.image/t_share/MTU3ODc4NjAzNzYxNjQzNjYy/amber-fort-hero.jpg",
+                description1: "Amber Fort is a fort located in Amer, Rajasthan, India. It is known for its artistic Hindu style elements.",
+                description2: "The fort overlooks Maota Lake and is a major tourist attraction in Jaipur.",
+                mapEmbed: `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3551.0000000000005!2d75.85133031542232!3d26.98548497922113!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x396db4b4b4b4b4b4%3A0x4b4b4b4b4b4b4b4b!2sAmber%20Fort!5e0!3m2!1sen!2sus!4v1747216000000!5m2!1sen!2sus" width="600" height="450" style="border:0;" allowfullscreen loading="lazy"></iframe>`,
+                locationText: "Located in Amer, 11 km from Jaipur, Rajasthan, India.",
+                facts: [
+                    { color: "#bf00ff", content: "<strong>Coordinates:</strong> 26°59′4″N 75°51′28″E" },
+                    { color: "#00bfff", content: "<strong>Built:</strong> 1592<br><strong>Founder:</strong> Raja Man Singh I" },
+                    { color: "#ffbf00", content: "<strong>Style:</strong> Rajput architecture" },
+                    { color: "#00ffbf", content: "<strong>UNESCO:</strong> 2013 (Hill Forts of Rajasthan)" },
+                    { color: "#ff00bf", content: "<strong>Visitors:</strong> ~1.5 million/year" },
+                    { color: "#00ff40", content: `<strong>Website:</strong> <a href="https://amberfort.org/" target="_blank">amberfort.org</a>` }
+                ]
+            },
+
+            Machu_Picchu: {
+                title: "Machu Picchu",
+                carousel: [
+                    "https://upload.wikimedia.org/wikipedia/commons/e/eb/Machu_Picchu%2C_Peru.jpg",
+                    "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80",
+                    "https://www.planetware.com/wpimages/2020/02/peru-machu-picchu-top-attractions.jpg",
+                    "https://cdn.britannica.com/33/1933-050-3B7B7B7B/Machu-Picchu-Peru.jpg"
+                ],
+                image: "https://www.history.com/.image/t_share/MTU3ODc4NjAzNzYxNjQzNjYy/machu-picchu-hero.jpg",
+                description1: "Machu Picchu is a 15th-century Inca citadel located in the Eastern Cordillera of southern Peru.",
+                description2: "It is often referred to as the 'Lost City of the Incas' and is a UNESCO World Heritage Site.",
+                mapEmbed: `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3827.0000000000005!2d-72.54512831542232!3d-13.16314197922113!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e8b8b8b8b8b8b8b%3A0x8b8b8b8b8b8b8b8b!2sMachu%20Picchu!5e0!3m2!1sen!2sus!4v1747217000000!5m2!1sen!2sus" width="600" height="450" style="border:0;" allowfullscreen loading="lazy"></iframe>`,
+                locationText: "Located in the Andes Mountains, Urubamba Province, Peru.",
+                facts: [
+                    { color: "#bf00ff", content: "<strong>Coordinates:</strong> 13°9′47″S 72°32′44″W" },
+                    { color: "#00bfff", content: "<strong>Built:</strong> c. 1450<br><strong>Height:</strong> 2,430 m" },
+                    { color: "#ffbf00", content: "<strong>Culture:</strong> Inca civilization" },
+                    { color: "#00ffbf", content: "<strong>UNESCO:</strong> 1983" },
+                    { color: "#ff00bf", content: "<strong>Visitors:</strong> ~1.5 million/year" },
+                    { color: "#00ff40", content: `<strong>Website:</strong> <a href="https://www.machupicchu.gob.pe/" target="_blank">machupicchu.gob.pe</a>` }
+                ]
+            },
+
+            Christ_the_Redeemer: {
+                title: "Christ the Redeemer",
+                carousel: [
+                    "https://upload.wikimedia.org/wikipedia/commons/0/0e/Cristo_Redentor_-_Rio_de_Janeiro%2C_Brasil.jpg",
+                    "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80",
+                    "https://www.planetware.com/wpimages/2020/02/brazil-rio-de-janeiro-christ-the-redeemer.jpg",
+                    "https://cdn.britannica.com/33/1933-050-3B7B7B7B/Christ-the-Redeemer-Rio-de-Janeiro.jpg"
+                ],
+                image: "https://www.history.com/.image/t_share/MTU3ODc4NjAzNzYxNjQzNjYy/christ-the-redeemer-hero.jpg",
+                description1: "Christ the Redeemer is an Art Deco statue of Jesus Christ in Rio de Janeiro, Brazil.",
+                description2: "It is 30 metres tall, not including its 8-metre pedestal, and its arms stretch 28 metres wide.",
+                mapEmbed: `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3673.0000000000005!2d-43.21048731542232!3d-22.95191697922113!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x997f8b8b8b8b8b8b%3A0x8b8b8b8b8b8b8b8b!2sChrist%20the%20Redeemer!5e0!3m2!1sen!2sus!4v1747218000000!5m2!1sen!2sus" width="600" height="450" style="border:0;" allowfullscreen loading="lazy"></iframe>`,
+                locationText: "Located at the peak of the 700-metre Corcovado mountain in Rio de Janeiro, Brazil.",
+                facts: [
+                    { color: "#bf00ff", content: "<strong>Coordinates:</strong> 22°57′6″S 43°12′39″W" },
+                    { color: "#00bfff", content: "<strong>Height:</strong> 30 m (statue), 38 m (total)" },
+                    { color: "#ffbf00", content: "<strong>Built:</strong> 1922–1931<br><strong>Style:</strong> Art Deco" },
+                    { color: "#00ffbf", content: "<strong>Material:</strong> Reinforced concrete, soapstone" },
+                    { color: "#ff00bf", content: "<strong>Visitors:</strong> ~2 million/year" },
+                    { color: "#00ff40", content: `<strong>Website:</strong> <a href="https://cristoredentoroficial.com.br/" target="_blank">cristoredentoroficial.com.br</a>` }
+                ]
+            },
+
+            Eiffel_Tower: {
+                title: "Eiffel Tower",
+                carousel: [
+                    "https://upload.wikimedia.org/wikipedia/commons/a/a8/Tour_Eiffel_Wikimedia_Commons.jpg",
+                    "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=1200&q=80",
+                    "https://www.planetware.com/wpimages/2020/02/france-paris-eiffel-tower.jpg",
+                    "https://cdn.britannica.com/33/1933-050-3B7B7B7B/Eiffel-Tower-Paris-France.jpg"
+                ],
+                image: "https://www.history.com/.image/t_share/MTU3ODc4NjAzNzYxNjQzNjYy/eiffel-tower-hero.jpg",
+                description1: "The Eiffel Tower is a wrought-iron lattice tower on the Champ de Mars in Paris, France.",
+                description2: "It is named after the engineer Gustave Eiffel, whose company designed and built the tower.",
+                mapEmbed: `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2624.0000000000005!2d2.29448131542232!3d48.85837007922113!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e66f8b8b8b8b8b%3A0x8b8b8b8b8b8b8b8b!2sEiffel%20Tower!5e0!3m2!1sen!2sus!4v1747219000000!5m2!1sen!2sus" width="600" height="450" style="border:0;" allowfullscreen loading="lazy"></iframe>`,
+                locationText: "Located on the Champ de Mars in Paris, France.",
+                facts: [
+                    { color: "#bf00ff", content: "<strong>Coordinates:</strong> 48°51′29″N 2°17′40″E" },
+                    { color: "#00bfff", content: "<strong>Height:</strong> 330 m<br><strong>Floors:</strong> 3" },
+                    { color: "#ffbf00", content: "<strong>Built:</strong> 1887–1889<br><strong>Architect:</strong> Gustave Eiffel" },
+                    { color: "#00ffbf", content: "<strong>Material:</strong> Wrought iron" },
+                    { color: "#ff00bf", content: "<strong>Visitors:</strong> ~7 million/year" },
+                    { color: "#00ff40", content: `<strong>Website:</strong> <a href="https://www.toureiffel.paris/" target="_blank">toureiffel.paris</a>` }
+                ]
+            },
+
+            Statue_of_Liberty: {
+                title: "Statue of Liberty",
+                carousel: [
+                    "https://upload.wikimedia.org/wikipedia/commons/a/a1/Statue_of_Liberty_7.jpg",
+                    "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=1200&q=80",
+                    "https://www.planetware.com/wpimages/2020/02/usa-new-york-statue-of-liberty.jpg",
+                    "https://cdn.britannica.com/33/1933-050-3B7B7B7B/Statue-of-Liberty-New-York.jpg"
+                ],
+                image: "https://www.history.com/.image/t_share/MTU3ODc4NjAzNzYxNjQzNjYy/statue-of-liberty-hero.jpg",
+                description1: "The Statue of Liberty is a colossal neoclassical sculpture on Liberty Island in New York Harbor.",
+                description2: "It was a gift from the people of France to the United States.",
+                mapEmbed: `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3021.0000000000005!2d-74.04450031542232!3d40.68924997922113!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c250b8b8b8b8b8b%3A0x8b8b8b8b8b8b8b8b!2sStatue%20of%20Liberty!5e0!3m2!1sen!2sus!4v1747220000000!5m2!1sen!2sus" width="600" height="450" style="border:0;" allowfullscreen loading="lazy"></iframe>`,
+                locationText: "Located on Liberty Island in New York Harbor, New York City, USA.",
+                facts: [
+                    { color: "#bf00ff", content: "<strong>Coordinates:</strong> 40°41′21″N 74°2′40″W" },
+                    { color: "#00bfff", content: "<strong>Height:</strong> 93 m (total)<br><strong>Material:</strong> Copper" },
+                    { color: "#ffbf00", content: "<strong>Built:</strong> 1875–1886<br><strong>Designer:</strong> Frédéric Auguste Bartholdi" },
+                    { color: "#00ffbf", content: "<strong>UNESCO:</strong> 1984" },
+                    { color: "#ff00bf", content: "<strong>Visitors:</strong> ~4.5 million/year" },
+                    { color: "#00ff40", content: `<strong>Website:</strong> <a href="https://www.nps.gov/stli/" target="_blank">nps.gov/stli</a>` }
+                ]
+            },
+
+            Sydney_Opera_House: {
+                title: "Sydney Opera House",
+                carousel: [
+                    "https://upload.wikimedia.org/wikipedia/commons/4/40/Sydney_Opera_House_Sails.jpg",
+                    "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=1200&q=80",
+                    "https://www.planetware.com/wpimages/2020/02/australia-sydney-opera-house.jpg",
+                    "https://cdn.britannica.com/33/1933-050-3B7B7B7B/Sydney-Opera-House-Australia.jpg"
+                ],
+                image: "https://www.history.com/.image/t_share/MTU3ODc4NjAzNzYxNjQzNjYy/sydney-opera-house-hero.jpg",
+                description1: "The Sydney Opera House is a multi-venue performing arts centre in Sydney, Australia.",
+                description2: "It is one of the 20th century's most famous and distinctive buildings.",
+                mapEmbed: `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3310.0000000000005!2d151.21529631542232!3d-33.85678497922113!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6b12ae3b8b8b8b8b%3A0x8b8b8b8b8b8b8b8b!2sSydney%20Opera%20House!5e0!3m2!1sen!2sus!4v1747221000000!5m2!1sen!2sus" width="600" height="450" style="border:0;" allowfullscreen loading="lazy"></iframe>`,
+                locationText: "Located on Bennelong Point in Sydney Harbour, Australia.",
+                facts: [
+                    { color: "#bf00ff", content: "<strong>Coordinates:</strong> 33°51′25″S 151°12′55″E" },
+                    { color: "#00bfff", content: "<strong>Opened:</strong> 1973<br><strong>Architect:</strong> Jørn Utzon" },
+                    { color: "#ffbf00", content: "<strong>Style:</strong> Expressionist" },
+                    { color: "#00ffbf", content: "<strong>UNESCO:</strong> 2007" },
+                    { color: "#ff00bf", content: "<strong>Visitors:</strong> ~8.2 million/year" },
+                    { color: "#00ff40", content: `<strong>Website:</strong> <a href="https://www.sydneyoperahouse.com/" target="_blank">sydneyoperahouse.com</a>` }
+                ]
+            },
+
+            Angkor_Wat: {
+                title: "Angkor Wat",
+                carousel: [
+                    "https://upload.wikimedia.org/wikipedia/commons/a/a2/Angkor_Wat_temple.jpg",
+                    "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=1200&q=80",
+                    "https://www.planetware.com/wpimages/2020/02/cambodia-angkor-wat-top-attractions.jpg",
+                    "https://cdn.britannica.com/33/1933-050-3B7B7B7B/Angkor-Wat-Cambodia.jpg"
+                ],
+                image: "https://www.history.com/.image/t_share/MTU3ODc4NjAzNzYxNjQzNjYy/angkor-wat-hero.jpg",
+                description1: "Angkor Wat is a temple complex in Cambodia and is the largest religious monument in the world.",
+                description2: "Originally constructed as a Hindu temple, it was gradually transformed into a Buddhist temple.",
+                mapEmbed: `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.0000000000005!2d103.86698631542232!3d13.41246997922113!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x311019b8b8b8b8b8%3A0x8b8b8b8b8b8b8b8b!2sAngkor%20Wat!5e0!3m2!1sen!2sus!4v1747222000000!5m2!1sen!2sus" width="600" height="450" style="border:0;" allowfullscreen loading="lazy"></iframe>`,
+                locationText: "Located in Siem Reap, Cambodia.",
+                facts: [
+                    { color: "#bf00ff", content: "<strong>Coordinates:</strong> 13°24′45″N 103°52′0″E" },
+                    { color: "#00bfff", content: "<strong>Built:</strong> Early 12th century<br><strong>Founder:</strong> Suryavarman II" },
+                    { color: "#ffbf00", content: "<strong>Area:</strong> 162.6 ha" },
+                    { color: "#00ffbf", content: "<strong>UNESCO:</strong> 1992" },
+                    { color: "#ff00bf", content: "<strong>Visitors:</strong> ~2.6 million/year" },
+                    { color: "#00ff40", content: `<strong>Website:</strong> <a href="https://www.angkorwat.org/" target="_blank">angkorwat.org</a>` }
+                ]
+            },
+
+            Stonehenge: {
+                title: "Stonehenge",
+                carousel: [
+                    "https://upload.wikimedia.org/wikipedia/commons/3/3c/Stonehenge2007_07_30.jpg",
+                    "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=1200&q=80",
+                    "https://www.planetware.com/wpimages/2020/02/england-stonehenge-top-attractions.jpg",
+                    "https://cdn.britannica.com/33/1933-050-3B7B7B7B/Stonehenge-England.jpg"
+                ],
+                image: "https://www.history.com/.image/t_share/MTU3ODc4NjAzNzYxNjQzNjYy/stonehenge-hero.jpg",
+                description1: "Stonehenge is a prehistoric monument in Wiltshire, England, consisting of a ring of standing stones.",
+                description2: "It is one of the most famous landmarks in the United Kingdom.",
+                mapEmbed: `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2490.0000000000005!2d-1.82618931542232!3d51.17888297922113!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4873e8b8b8b8b8b8%3A0x8b8b8b8b8b8b8b8b!2sStonehenge!5e0!3m2!1sen!2sus!4v1747223000000!5m2!1sen!2sus" width="600" height="450" style="border:0;" allowfullscreen loading="lazy"></iframe>`,
+                locationText: "Located in Wiltshire, England, about 2 miles west of Amesbury.",
+                facts: [
+                    { color: "#bf00ff", content: "<strong>Coordinates:</strong> 51°10′44″N 1°49′34″W" },
+                    { color: "#00bfff", content: "<strong>Built:</strong> c. 3000 BC–2000 BC" },
+                    { color: "#ffbf00", content: "<strong>Material:</strong> Sarsen, bluestone" },
+                    { color: "#00ffbf", content: "<strong>UNESCO:</strong> 1986" },
+                    { color: "#ff00bf", content: "<strong>Visitors:</strong> ~1.5 million/year" },
+                    { color: "#00ff40", content: `<strong>Website:</strong> <a href="https://www.english-heritage.org.uk/visit/places/stonehenge/" target="_blank">english-heritage.org.uk</a>` }
+                ]
+            },
+
+            Acropolis_of_Athens: {
+                title: "Acropolis of Athens",
+                carousel: [
+                    "https://upload.wikimedia.org/wikipedia/commons/d/d6/Acropolis_of_Athens_2019.jpg",
+                    "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=1200&q=80",
+                    "https://www.planetware.com/wpimages/2020/02/greece-athens-acropolis.jpg",
+                    "https://cdn.britannica.com/33/1933-050-3B7B7B7B/Acropolis-Athens-Greece.jpg"
+                ],
+                image: "https://www.history.com/.image/t_share/MTU3ODc4NjAzNzYxNjQzNjYy/acropolis-athens-hero.jpg",
+                description1: "The Acropolis of Athens is an ancient citadel located on a rocky outcrop above the city of Athens.",
+                description2: "It contains the remains of several ancient buildings of great architectural and historic significance, the most famous being the Parthenon.",
+                mapEmbed: `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3132.0000000000005!2d23.72664731542232!3d37.97153297922113!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14a1bd8b8b8b8b8b%3A0x8b8b8b8b8b8b8b8b!2sAcropolis%20of%20Athens!5e0!3m2!1sen!2sus!4v1747224000000!5m2!1sen!2sus" width="600" height="450" style="border:0;" allowfullscreen loading="lazy"></iframe>`,
+                locationText: "Located in Athens, Greece, on a rocky hill above the city.",
+                facts: [
+                    { color: "#bf00ff", content: "<strong>Coordinates:</strong> 37°58′17″N 23°43′36″E" },
+                    { color: "#00bfff", content: "<strong>Built:</strong> 5th century BC" },
+                    { color: "#ffbf00", content: "<strong>Style:</strong> Classical Greek" },
+                    { color: "#00ffbf", content: "<strong>UNESCO:</strong> 1987" },
+                    { color: "#ff00bf", content: "<strong>Visitors:</strong> ~2.5 million/year" },
+                    { color: "#00ff40", content: `<strong>Website:</strong> <a href="https://www.theacropolismuseum.gr/en" target="_blank">theacropolismuseum.gr</a>` }
+                ]
+            },
+
+            Mount_Fuji: {
+                title: "Mount Fuji",
+                carousel: [
+                    "https://upload.wikimedia.org/wikipedia/commons/1/12/Mount_Fuji_from_Hakone%2C_Japan.jpg",
+                    "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=1200&q=80",
+                    "https://www.planetware.com/wpimages/2020/02/japan-mount-fuji-top-attractions.jpg",
+                    "https://cdn.britannica.com/33/1933-050-3B7B7B7B/Mount-Fuji-Japan.jpg"
+                ],
+                image: "https://www.history.com/.image/t_share/MTU3ODc4NjAzNzYxNjQzNjYy/mount-fuji-hero.jpg",
+                description1: "Mount Fuji is an active stratovolcano about 100 km southwest of Tokyo, Japan.",
+                description2: "It is the highest mountain in Japan and a well-known symbol of the country.",
+                mapEmbed: `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3245.0000000000005!2d138.72736331542232!3d35.36063897922113!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6019b8b8b8b8b8b8%3A0x8b8b8b8b8b8b8b8b!2sMount%20Fuji!5e0!3m2!1sen!2sus!4v1747225000000!5m2!1sen!2sus" width="600" height="450" style="border:0;" allowfullscreen loading="lazy"></iframe>`,
+                locationText: "Located on Honshu Island, Japan, about 100 km southwest of Tokyo.",
+                facts: [
+                    { color: "#bf00ff", content: "<strong>Coordinates:</strong> 35°21′29″N 138°43′52″E" },
+                    { color: "#00bfff", content: "<strong>Height:</strong> 3,776 m" },
+                    { color: "#ffbf00", content: "<strong>Type:</strong> Stratovolcano" },
+                    { color: "#00ffbf", content: "<strong>UNESCO:</strong> 2013" },
+                    { color: "#ff00bf", content: "<strong>Visitors:</strong> ~300,000 climbers/year" },
+                    { color: "#00ff40", content: `<strong>Website:</strong> <a href="https://www.japan-guide.com/e/e2172.html" target="_blank">japan-guide.com</a>` }
+                ]
+            },
+
+            Burj_Khalifa: {
+                title: "Burj Khalifa",
+                carousel: [
+                    "https://upload.wikimedia.org/wikipedia/commons/9/93/Burj_Khalifa.jpg",
+                    "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=1200&q=80",
+                    "https://www.planetware.com/wpimages/2020/02/uae-dubai-burj-khalifa.jpg",
+                    "https://cdn.britannica.com/33/1933-050-3B7B7B7B/Burj-Khalifa-Dubai.jpg"
+                ],
+                image: "https://www.history.com/.image/t_share/MTU3ODc4NjAzNzYxNjQzNjYy/burj-khalifa-hero.jpg",
+                description1: "The Burj Khalifa is a skyscraper in Dubai, United Arab Emirates, and is the tallest structure and building in the world.",
+                description2: "It was designed by Adrian Smith of Skidmore, Owings & Merrill.",
+                mapEmbed: `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3609.0000000000005!2d55.27361031542232!3d25.19719797922113!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f8b8b8b8b8b8b%3A0x8b8b8b8b8b8b8b8b!2sBurj%20Khalifa!5e0!3m2!1sen!2sus!4v1747226000000!5m2!1sen!2sus" width="600" height="450" style="border:0;" allowfullscreen loading="lazy"></iframe>`,
+                locationText: "Located in Downtown Dubai, United Arab Emirates.",
+                facts: [
+                    { color: "#bf00ff", content: "<strong>Coordinates:</strong> 25°11′50″N 55°16′27″E" },
+                    { color: "#00bfff", content: "<strong>Height:</strong> 828 m<br><strong>Floors:</strong> 163" },
+                    { color: "#ffbf00", content: "<strong>Built:</strong> 2004–2010" },
+                    { color: "#00ffbf", content: "<strong>Architect:</strong> Adrian Smith" },
+                    { color: "#ff00bf", content: "<strong>Visitors:</strong> ~2 million/year" },
+                    { color: "#00ff40", content: `<strong>Website:</strong> <a href="https://www.burjkhalifa.ae/" target="_blank">burjkhalifa.ae</a>` }
+                ]
+            },
+
+            Golden_Gate_Bridge: {
+                title: "Golden Gate Bridge",
+                carousel: [
+                    "https://upload.wikimedia.org/wikipedia/commons/0/0c/GoldenGateBridge-001.jpg",
+                    "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=1200&q=80",
+                    "https://www.planetware.com/wpimages/2020/02/usa-san-francisco-golden-gate-bridge.jpg",
+                    "https://cdn.britannica.com/33/1933-050-3B7B7B7B/Golden-Gate-Bridge-San-Francisco.jpg"
+                ],
+                image: "https://www.history.com/.image/t_share/MTU3ODc4NjAzNzYxNjQzNjYy/golden-gate-bridge-hero.jpg",
+                description1: "The Golden Gate Bridge is a suspension bridge spanning the Golden Gate, the one-mile-wide strait connecting San Francisco Bay and the Pacific Ocean.",
+                description2: "It is one of the most internationally recognized symbols of San Francisco and the United States.",
+                mapEmbed: `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.0000000000005!2d-122.47825531542232!3d37.81992997922113!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x808f8b8b8b8b8b8b%3A0x8b8b8b8b8b8b8b8b!2sGolden%20Gate%20Bridge!5e0!3m2!1sen!2sus!4v1747227000000!5m2!1sen!2sus" width="600" height="450" style="border:0;" allowfullscreen loading="lazy"></iframe>`,
+                locationText: "Located in San Francisco, California, USA.",
+                facts: [
+                    { color: "#bf00ff", content: "<strong>Coordinates:</strong> 37°49′11″N 122°28′43″W" },
+                    { color: "#00bfff", content: "<strong>Length:</strong> 2,737 m<br><strong>Height:</strong> 227 m" },
+                    { color: "#ffbf00", content: "<strong>Opened:</strong> 1937" },
+                    { color: "#00ffbf", content: "<strong>Type:</strong> Suspension bridge" },
+                    { color: "#ff00bf", content: "<strong>Visitors:</strong> ~10 million/year" },
+                    { color: "#00ff40", content: `<strong>Website:</strong> <a href="https://www.goldengate.org/" target="_blank">goldengate.org</a>` }
+                ]
+            },
+
+            Pyramids_of_Giza: {
+                title: "Pyramids of Giza",
+                carousel: [
+                    "https://upload.wikimedia.org/wikipedia/commons/e/e3/Kheops-Pyramid.jpg",
+                    "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=1200&q=80",
+                    "https://www.planetware.com/wpimages/2020/02/egypt-giza-pyramids.jpg",
+                    "https://cdn.britannica.com/33/1933-050-3B7B7B7B/Pyramids-of-Giza-Egypt.jpg"
+                ],
+                image: "https://www.history.com/.image/t_share/MTU3ODc4NjAzNzYxNjQzNjYy/pyramids-giza-hero.jpg",
+                description1: "The Pyramids of Giza are ancient pyramid-shaped masonry structures located in Giza, Egypt.",
+                description2: "They are the oldest of the Seven Wonders of the Ancient World, and the only one to remain largely intact.",
+                mapEmbed: `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3454.0000000000005!2d31.13420231542232!3d29.97923497922113!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x145845b8b8b8b8b8%3A0x8b8b8b8b8b8b8b8b!2sPyramids%20of%20Giza!5e0!3m2!1sen!2sus!4v1747228000000!5m2!1sen!2sus" width="600" height="450" style="border:0;" allowfullscreen loading="lazy"></iframe>`,
+                locationText: "Located in Giza, on the outskirts of Cairo, Egypt.",
+                facts: [
+                    { color: "#bf00ff", content: "<strong>Coordinates:</strong> 29°58′45″N 31°8′3″E" },
+                    { color: "#00bfff", content: "<strong>Built:</strong> c. 2600 BC<br><strong>Height:</strong> 146.6 m (Great Pyramid)" },
+                    { color: "#ffbf00", content: "<strong>Material:</strong> Limestone, granite" },
+                    { color: "#00ffbf", content: "<strong>UNESCO:</strong> 1979" },
+                    { color: "#ff00bf", content: "<strong>Visitors:</strong> ~14.7 million/year" },
+                    { color: "#00ff40", content: `<strong>Website:</strong> <a href="https://egymonuments.gov.eg/monuments/great-pyramid-of-khufu" target="_blank">egymonuments.gov.eg</a>` }
+                ]
+            },
+
+            Sagrada_Familia: {
+                title: "Sagrada Familia",
+                carousel: [
+                    "https://upload.wikimedia.org/wikipedia/commons/9/9e/Sagrada_Familia_01.jpg",
+                    "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=1200&q=80",
+                    "https://www.planetware.com/wpimages/2020/02/spain-barcelona-sagrada-familia.jpg",
+                    "https://cdn.britannica.com/33/1933-050-3B7B7B7B/Sagrada-Familia-Barcelona-Spain.jpg"
+                ],
+                image: "https://www.history.com/.image/t_share/MTU3ODc4NjAzNzYxNjQzNjYy/sagrada-familia-hero.jpg",
+                description1: "The Basílica de la Sagrada Família is a large unfinished Roman Catholic minor basilica in Barcelona, Spain.",
+                description2: "Designed by Catalan architect Antoni Gaudí, its construction began in 1882 and is ongoing.",
+                mapEmbed: `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2992.0000000000005!2d2.17435631542232!3d41.40362997922113!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12a4a2b8b8b8b8b8%3A0x8b8b8b8b8b8b8b8b!2sSagrada%20Familia!5e0!3m2!1sen!2sus!4v1747229000000!5m2!1sen!2sus" width="600" height="450" style="border:0;" allowfullscreen loading="lazy"></iframe>`,
+                locationText: "Located in Barcelona, Catalonia, Spain.",
+                facts: [
+                    { color: "#bf00ff", content: "<strong>Coordinates:</strong> 41°24′13″N 2°10′28″E" },
+                    { color: "#00bfff", content: "<strong>Built:</strong> 1882–present<br><strong>Architect:</strong> Antoni Gaudí" },
+                    { color: "#ffbf00", content: "<strong>Style:</strong> Modernisme, Gothic Revival" },
+                    { color: "#00ffbf", content: "<strong>UNESCO:</strong> 2005" },
+                    { color: "#ff00bf", content: "<strong>Visitors:</strong> ~4.5 million/year" },
+                    { color: "#00ff40", content: `<strong>Website:</strong> <a href="https://sagradafamilia.org/" target="_blank">sagradafamilia.org</a>` }
+                ]
+            },
+
+            Louvre_Museum: {
+                title: "Louvre Museum",
+                carousel: [
+                    "https://upload.wikimedia.org/wikipedia/commons/a/af/Louvre_Museum_Wikimedia_Commons.jpg",
+                    "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=1200&q=80",
+                    "https://www.planetware.com/wpimages/2020/02/france-paris-louvre-museum.jpg",
+                    "https://cdn.britannica.com/33/1933-050-3B7B7B7B/Louvre-Museum-Paris-France.jpg"
+                ],
+                image: "https://www.history.com/.image/t_share/MTU3ODc4NjAzNzYxNjQzNjYy/louvre-museum-hero.jpg",
+                description1: "The Louvre is the world's largest art museum and a historic monument in Paris, France.",
+                description2: "It is home to thousands of works of art, including the Mona Lisa and the Venus de Milo.",
+                mapEmbed: `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2624.0000000000005!2d2.33545531542232!3d48.86061197922113!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e66f8b8b8b8b8b%3A0x8b8b8b8b8b8b8b8b!2sLouvre%20Museum!5e0!3m2!1sen!2sus!4v1747230000000!5m2!1sen!2sus" width="600" height="450" style="border:0;" allowfullscreen loading="lazy"></iframe>`,
+                locationText: "Located on the Right Bank of the Seine in Paris, France.",
+                facts: [
+                    { color: "#bf00ff", content: "<strong>Coordinates:</strong> 48°51′39″N 2°20′8″E" },
+                    { color: "#00bfff", content: "<strong>Established:</strong> 1793<br><strong>Area:</strong> 72,735 m²" },
+                    { color: "#ffbf00", content: "<strong>Collection:</strong> 615,797 objects" },
+                    { color: "#00ffbf", content: "<strong>Visitors:</strong> ~7.8 million/year" },
+                    { color: "#ff00bf", content: "<strong>Director:</strong> Laurence des Cars" },
+                    { color: "#00ff40", content: `<strong>Website:</strong> <a href="https://www.louvre.fr/en" target="_blank">louvre.fr</a>` }
+                ]
+            },
+
+            // Add more places like "great_wall_of_china": { ... } here
+        };
+
+        const params = new URLSearchParams(window.location.search);
+        const placeId = params.get("place");
+        const place = data[placeId];
+
+        if (place) {
+            document.getElementById("title").textContent = place.title;
+            document.getElementById("mainImage").src = place.image;
+            document.getElementById("description1").textContent = place.description1;
+            document.getElementById("description2").textContent = place.description2;
+            document.getElementById("locationText").textContent = place.locationText;
+            document.getElementById("mapContainer").innerHTML = place.mapEmbed;
+
+            const carouselHTML = `
+      <div id="carouselExample" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
+        <div class="carousel-inner">
+          ${place.carousel.map((src, i) => `
+            <div class="carousel-item ${i === 0 ? 'active' : ''}">
+              <img src="${src}" class="d-block w-100" alt="Slide ${i + 1}">
+            </div>
+          `).join('')}
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+          <span class="carousel-control-next-icon"></span>
+        </button>
+      </div>
+    `;
+            document.getElementById("carouselContainer").innerHTML = carouselHTML;
+
+            const infoHTML = place.facts.map(fact => `
+      <div class="col-md-5">
+        <div class="info-box" style="background: ${fact.color}20; border: 2px solid ${fact.color};">
+          <span class="coordinates-text">${fact.content}</span>
+        </div>
+      </div>
+    `).join('');
+            document.getElementById("infoBoxes").innerHTML = infoHTML;
+        } else {
+            document.querySelector("body").innerHTML = "<h1 class='text-center mt-5'>Place not found</h1>";
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
