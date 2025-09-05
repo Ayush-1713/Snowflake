@@ -1,7 +1,7 @@
 <h1>Snowflake</h1>
 <hr>
 ⚠️ This project is currently under development.
-If you would like to contribute or provide suggestions, feel free to email me at [your-email@example.com].
+If you would like to contribute or provide suggestions, feel free to email me at [ayush171314844@gmail.com].
 
 🌐 <h1>Overview</h1>
 Snowflake is a web-based project designed to provide insights into various locations that are undergoing gradual development. The application offers users a visual and interactive experience to explore these areas, highlighting their unique characteristics and the pace of their growth
